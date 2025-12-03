@@ -1,0 +1,78 @@
+{
+  "home": {
+    "title": "नवीनतम सरकारी नौकरी अधिसूचनाएं",
+    "subtitle": "भारत की सबसे अपडेट सरकारी नौकरी वेबसाइट",
+    "search": "नौकरी खोजें...",
+    "latestJobs": "नवीनतम नौकरियां",
+    "trendingJobs": "ट्रेंडिंग नौकरियां",
+    "categories": "श्रेणियां",
+    "viewAll": "सभी देखें"
+  },
+  "navigation": {
+    "home": "होम",
+    "jobs": "नौकरियां",
+    "admitCard": "एडमिट कार्ड",
+    "results": "रिजल्ट",
+    "answerKey": "आंसर की",
+    "language": "भाषा",
+    "admin": "एडमिन"
+  },
+  "categories": {
+    "railway": "रेलवे",
+    "ssc": "एसएससी",
+    "bank": "बैंक",
+    "police": "पुलिस",
+    "stateGovt": "राज्य सरकार",
+    "defenseJobs": "रक्षा नौकरियां",
+    "teachingJobs": "शिक्षण नौकरियां",
+    "engineeringJobs": "इंजीनियरिंग नौकरियां"
+  },
+  "jobCard": {
+    "posted": "पोस्ट किया गया",
+    "expires": "समाप्त होता है",
+    "viewDetails": "विवरण देखें",
+    "newJob": "नई",
+    "hotJob": "हॉट"
+  },
+  "jobDetails": {
+    "overview": "अवलोकन",
+    "eligibility": "पात्रता",
+    "applicationFee": "आवेदन शुल्क",
+    "importantDates": "महत्वपूर्ण तारीखें",
+    "howToApply": "आवेदन कैसे करें",
+    "relatedJobs": "संबंधित नौकरियां"
+  },
+  "admin": {
+    "login": "लॉगिन",
+    "dashboard": "डैशबोर्ड",
+    "createJob": "नई नौकरी बनाएं",
+    "editJob": "नौकरी संपादित करें",
+    "deleteJob": "नौकरी हटाएं",
+    "manageJobs": "नौकरियां प्रबंधित करें"
+  },
+  "form": {
+    "title": "शीर्षक",
+    "subtitle": "उपशीर्षक",
+    "description": "विवरण",
+    "category": "श्रेणी",
+    "jobType": "नौकरी प्रकार",
+    "location": "स्थान",
+    "publishDate": "प्रकाशन तारीख",
+    "expiryDate": "समाप्ति तारीख",
+    "save": "सेव करें",
+    "cancel": "रद्द करें",
+    "submit": "सबमिट करें"
+  },
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "confirm": "पुष्टि करें",
+    "yes": "हां",
+    "no": "नहीं",
+    "readMore": "और पढ़ें",
+    "previous": "पिछला",
+    "next": "अगला",
+    "page": "पेज"
+  }
+}

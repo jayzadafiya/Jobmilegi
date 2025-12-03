@@ -1,0 +1,37 @@
+{
+  "home": {
+    "title": "નવીનતમ સરકારી નોકરીની જાહેરાતો",
+    "subtitle": "ભારતની સૌથી અપડેટ સરકારી નોકરી વેબસાઇટ",
+    "search": "નોકરી શોધો...",
+    "latestJobs": "નવીનતમ નોકરીઓ",
+    "trendingJobs": "ટ્રેન્ડિંગ નોકરીઓ",
+    "categories": "કેટેગરી",
+    "viewAll": "બધું જુઓ"
+  },
+  "navigation": {
+    "home": "હોમ",
+    "jobs": "નોકરીઓ",
+    "admitCard": "પ્રવેશપત્ર",
+    "results": "પરિણામો",
+    "answerKey": "જવાબ કી",
+    "language": "ભાષા",
+    "admin": "એડમિન"
+  },
+  "categories": {
+    "railway": "રેલવે",
+    "ssc": "઎સ઎સસી",
+    "bank": "બેંક",
+    "police": "પોલીસ",
+    "stateGovt": "રાજ્ય સરકાર",
+    "defenseJobs": "સંરક્ષણ નોકરીઓ",
+    "teachingJobs": "શિક્ષણ નોકરીઓ",
+    "engineeringJobs": "ઇંજિનિયરિંગ નોકરીઓ"
+  },
+  "jobCard": {
+    "posted": "પોસ્ટ કરેલ",
+    "expires": "સમાપ્ત થાય",
+    "viewDetails": "વિગતો જુઓ",
+    "newJob": "નવું",
+    "hotJob": "હોટ"
+  }
+}

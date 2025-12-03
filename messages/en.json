@@ -1,0 +1,78 @@
+{
+  "home": {
+    "title": "Latest Government Job Notifications",
+    "subtitle": "India's Most Updated Government Job Website",
+    "search": "Search jobs...",
+    "latestJobs": "Latest Jobs",
+    "trendingJobs": "Trending Jobs",
+    "categories": "Categories",
+    "viewAll": "View All"
+  },
+  "navigation": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "admitCard": "Admit Card",
+    "results": "Results",
+    "answerKey": "Answer Key",
+    "language": "Language",
+    "admin": "Admin"
+  },
+  "categories": {
+    "railway": "Railway",
+    "ssc": "SSC",
+    "bank": "Bank",
+    "police": "Police",
+    "stateGovt": "State Government",
+    "defenseJobs": "Defense Jobs",
+    "teachingJobs": "Teaching Jobs",
+    "engineeringJobs": "Engineering Jobs"
+  },
+  "jobCard": {
+    "posted": "Posted",
+    "expires": "Expires",
+    "viewDetails": "View Details",
+    "newJob": "New",
+    "hotJob": "Hot"
+  },
+  "jobDetails": {
+    "overview": "Overview",
+    "eligibility": "Eligibility",
+    "applicationFee": "Application Fee",
+    "importantDates": "Important Dates",
+    "howToApply": "How to Apply",
+    "relatedJobs": "Related Jobs"
+  },
+  "admin": {
+    "login": "Login",
+    "dashboard": "Dashboard",
+    "createJob": "Create New Job",
+    "editJob": "Edit Job",
+    "deleteJob": "Delete Job",
+    "manageJobs": "Manage Jobs"
+  },
+  "form": {
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "description": "Description",
+    "category": "Category",
+    "jobType": "Job Type",
+    "location": "Location",
+    "publishDate": "Publish Date",
+    "expiryDate": "Expiry Date",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "readMore": "Read More",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page"
+  }
+}

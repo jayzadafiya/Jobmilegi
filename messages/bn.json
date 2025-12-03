@@ -1,0 +1,37 @@
+{
+  "home": {
+    "title": "সর্বশেষ সরকারি চাকরির বিজ্ঞপ্তি",
+    "subtitle": "ভারতের সবচেয়ে আপডেট সরকারি চাকরির ওয়েবসাইট",
+    "search": "চাকরি খুঁজুন...",
+    "latestJobs": "সর্বশেষ চাকরি",
+    "trendingJobs": "ট্রেন্ডিং চাকরি",
+    "categories": "বিভাগ",
+    "viewAll": "সব দেখুন"
+  },
+  "navigation": {
+    "home": "হোম",
+    "jobs": "চাকরি",
+    "admitCard": "প্রবেশপত্র",
+    "results": "ফলাফল",
+    "answerKey": "উত্তর কী",
+    "language": "ভাষা",
+    "admin": "অ্যাডমিন"
+  },
+  "categories": {
+    "railway": "রেলওয়ে",
+    "ssc": "এসএসসি",
+    "bank": "ব্যাংক",
+    "police": "পুলিশ",
+    "stateGovt": "রাজ্য সরকার",
+    "defenseJobs": "প্রতিরক্ষা চাকরি",
+    "teachingJobs": "শিক্ষকতা চাকরি",
+    "engineeringJobs": "ইঞ্জিনিয়ারিং চাকরি"
+  },
+  "jobCard": {
+    "posted": "পোস্ট করা",
+    "expires": "মেয়াদ শেষ",
+    "viewDetails": "বিস্তারিত দেখুন",
+    "newJob": "নতুন",
+    "hotJob": "জনপ্রিয়"
+  }
+}

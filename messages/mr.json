@@ -1,0 +1,37 @@
+{
+  "home": {
+    "title": "नवीनतम सरकारी नोकरी अधिसूचना",
+    "subtitle": "भारताची सर्वात अपडेट सरकारी नोकरी वेबसाइट",
+    "search": "नोकरी शोधा...",
+    "latestJobs": "नवीनतम नोकऱ्या",
+    "trendingJobs": "ट्रेंडिंग नोकऱ्या",
+    "categories": "श्रेणी",
+    "viewAll": "सर्व पहा"
+  },
+  "navigation": {
+    "home": "होम",
+    "jobs": "नोकऱ्या",
+    "admitCard": "प्रवेशपत्र",
+    "results": "निकाल",
+    "answerKey": "उत्तर की",
+    "language": "भाषा",
+    "admin": "प्रशासक"
+  },
+  "categories": {
+    "railway": "रेल्वे",
+    "ssc": "एसएससी",
+    "bank": "बँक",
+    "police": "पोलिस",
+    "stateGovt": "राज्य सरकार",
+    "defenseJobs": "संरक्षण नोकऱ्या",
+    "teachingJobs": "शिक्षण नोकऱ्या",
+    "engineeringJobs": "अभियांत्रिकी नोकऱ्या"
+  },
+  "jobCard": {
+    "posted": "पोस्ट केले",
+    "expires": "संपते",
+    "viewDetails": "तपशील पहा",
+    "newJob": "नवीन",
+    "hotJob": "हॉट"
+  }
+}

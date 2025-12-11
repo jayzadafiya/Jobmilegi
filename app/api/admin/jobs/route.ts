@@ -63,6 +63,17 @@ export async function POST(request: NextRequest) {
 
     const data = await request.json();
 
+    // Debug: Log received data
+    console.log("📥 Received job data:", {
+      title: data.title,
+      hasApplicationProcess: !!data.applicationProcess,
+      hasImportantDates: !!data.importantDates,
+      hasHowToApply: !!data.howToApply,
+      applicationProcessLength: data.applicationProcess?.length || 0,
+      importantDatesLength: data.importantDates?.length || 0,
+      howToApplyLength: data.howToApply?.length || 0,
+    });
+
     await connectToDatabase();
     const job = await Job.create({
       ...data,
@@ -73,9 +84,11 @@ export async function POST(request: NextRequest) {
       createdBy: admin._id,
     });
 
+    console.log("✅ Job created:", job._id);
+
     return NextResponse.json(job, { status: 201 });
   } catch (error) {
-    console.error("Error creating job:", error);
+    console.error("❌ Error creating job:", error);
     return NextResponse.json(
       { error: "Failed to create job" },
       { status: 500 }

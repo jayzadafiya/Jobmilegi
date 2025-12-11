@@ -6,6 +6,9 @@ export interface IJob extends Document {
   subtitle?: string;
   shortDescription: string;
   descriptionHtml: string;
+  applicationProcess?: string;
+  importantDates?: string;
+  howToApply?: string;
   tags: string[];
   category: string;
   jobType: string;
@@ -52,6 +55,18 @@ const JobSchema = new Schema<IJob>(
     descriptionHtml: {
       type: String,
       required: true,
+    },
+    applicationProcess: {
+      type: String,
+      trim: true,
+    },
+    importantDates: {
+      type: String,
+      trim: true,
+    },
+    howToApply: {
+      type: String,
+      trim: true,
     },
     tags: [
       {
@@ -142,7 +157,7 @@ const JobSchema = new Schema<IJob>(
 );
 
 // Indexes for better performance
-JobSchema.index({ slug: 1 });
+// Note: slug index already created by unique: true
 JobSchema.index({ category: 1, isPublished: 1 });
 JobSchema.index({ jobType: 1, isPublished: 1 });
 JobSchema.index({ publishDate: -1 });
@@ -169,6 +184,7 @@ JobSchema.pre("save", function (next) {
   next();
 });
 
+// Prevent OverwriteModelError in Next.js development
 const Job: Model<IJob> =
   mongoose.models.Job || mongoose.model<IJob>("Job", JobSchema);
 

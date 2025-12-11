@@ -127,6 +127,8 @@ export const adminApi = {
 
   getJobs: () => api.get("/api/admin/jobs"),
 
+  getJob: (id: string) => api.get(`/api/admin/jobs/${id}`),
+
   createJob: (jobData: any) => api.post("/api/admin/jobs", jobData),
 
   updateJob: (id: string, jobData: any) =>

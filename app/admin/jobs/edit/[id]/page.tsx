@@ -5,13 +5,8 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { adminApi } from "@/lib/axios";
 
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-
-// Properly typed ReactQuill component with ref support
-let ReactQuill: any;
-if (typeof window !== "undefined") {
-  ReactQuill = require("react-quill");
-}
 
 // Custom styles for Quill editor
 const quillStyles = `
@@ -122,18 +117,8 @@ function TableBuilder({ onInsert }: { onInsert: (html: string) => void }) {
   };
 
   const insertTable = () => {
-    console.log("🎯 insertTable function called!");
-    console.log("📦 onInsert prop:", typeof onInsert, onInsert);
-    try {
-      const html = generateHTML();
-      console.log("✅ HTML generated:", html.substring(0, 100) + "...");
-      console.log("🚀 Calling onInsert...");
-      onInsert(html);
-      console.log("✅ onInsert called successfully");
-    } catch (error) {
-      console.error("❌ Error in insertTable:", error);
-      alert("Error inserting table: " + error);
-    }
+    const html = generateHTML();
+    onInsert(html);
   };
 
   return (
@@ -277,22 +262,18 @@ function TableBuilder({ onInsert }: { onInsert: (html: string) => void }) {
   );
 }
 
-export default function AddJobPage() {
+export default function EditJobPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [showTableGuide, setShowTableGuide] = useState(false);
   const [showTableBuilder, setShowTableBuilder] = useState<string | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
 
   // Refs for Quill editors
   const descriptionRef = useRef<any>(null);
   const applicationRef = useRef<any>(null);
   const datesRef = useRef<any>(null);
   const applyRef = useRef<any>(null);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   // Quill modules configuration
   const quillModules = {
@@ -320,124 +301,65 @@ export default function AddJobPage() {
   ];
 
   const [jobData, setJobData] = useState({
-    title: "Railway Recruitment 2025 - 5000+ Posts",
-    shortDescription:
-      "RRB is hiring for 5000+ posts including Group D, Junior Engineer, and Assistant Loco Pilot positions across India.",
-    category: "railway",
-    jobType: "recruitment",
-    location: "All India",
-    expiryDate: "2025-12-31",
-    description: `<h3>Post Details</h3>
-<table border="1" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr style="background-color: #f3f4f6;">
-      <th style="padding: 8px; text-align: left;">Post Name</th>
-      <th style="padding: 8px; text-align: left;">Total Posts</th>
-      <th style="padding: 8px; text-align: left;">Qualification</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="padding: 8px;">Group D Posts</td>
-      <td style="padding: 8px;">2500</td>
-      <td style="padding: 8px;">10th Pass</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px;">Junior Engineer</td>
-      <td style="padding: 8px;">1500</td>
-      <td style="padding: 8px;">Diploma/B.Tech</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px;">Assistant Loco Pilot</td>
-      <td style="padding: 8px;">1000</td>
-      <td style="padding: 8px;">12th + ITI</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3>Age Limit</h3>
-<ul>
-  <li>Minimum Age: 18 years</li>
-  <li>Maximum Age: 33 years</li>
-  <li>Age Relaxation: As per government rules</li>
-</ul>
-
-<h3>Application Fee</h3>
-<ul>
-  <li>General/OBC: ₹500</li>
-  <li>SC/ST/PWD/Women: No Fee</li>
-</ul>`,
-    applicationProcess: `<h3>Selection Process</h3>
-<ol>
-  <li><strong>Computer Based Test (CBT)</strong> - Multiple choice questions</li>
-  <li><strong>Physical Efficiency Test (PET)</strong> - For applicable posts</li>
-  <li><strong>Document Verification</strong></li>
-  <li><strong>Medical Examination</strong></li>
-</ol>
-
-<h3>Exam Pattern</h3>
-<ul>
-  <li>Total Questions: 100</li>
-  <li>Total Marks: 100</li>
-  <li>Duration: 90 minutes</li>
-  <li>Negative Marking: 1/3 for each wrong answer</li>
-</ul>`,
-    importantDates: `<table border="1" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr style="background-color: #f3f4f6;">
-      <th style="padding: 8px; text-align: left;">Event</th>
-      <th style="padding: 8px; text-align: left;">Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="padding: 8px;">Application Start Date</td>
-      <td style="padding: 8px;">01 December 2025</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px;">Last Date to Apply</td>
-      <td style="padding: 8px;">31 December 2025</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px;">Exam Date</td>
-      <td style="padding: 8px;">February 2026</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px;">Admit Card Release</td>
-      <td style="padding: 8px;">January 2026</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px;">Result Date</td>
-      <td style="padding: 8px;">March 2026</td>
-    </tr>
-  </tbody>
-</table>`,
-    howToApply: `<h3>Application Steps</h3>
-<ol>
-  <li>Visit the official website: <strong>www.rrbonline.gov.in</strong></li>
-  <li>Click on "Apply Online" link</li>
-  <li>Register with your email and mobile number</li>
-  <li>Fill the application form with correct details</li>
-  <li>Upload required documents:
-    <ul>
-      <li>Recent photograph (50KB, JPG format)</li>
-      <li>Signature (20KB, JPG format)</li>
-      <li>Educational certificates</li>
-    </ul>
-  </li>
-  <li>Pay application fee using Net Banking/Debit Card/Credit Card</li>
-  <li>Submit the form and take a printout for future reference</li>
-</ol>
-
-<p><strong>Note:</strong> Keep your registration number safe for future reference.</p>`,
-    tags: ["railway jobs", "government jobs", "rrb recruitment"],
+    title: "",
+    shortDescription: "",
+    category: "",
+    jobType: "",
+    location: "",
+    expiryDate: "",
+    description: "",
+    applicationProcess: "",
+    importantDates: "",
+    howToApply: "",
+    tags: [] as string[],
     imageUrl: "",
     youtubeUrl: "",
     metaTitle: "",
     metaDescription: "",
-    metaKeywords: [],
+    metaKeywords: [] as string[],
     isPublished: true,
   });
+
+  // Fetch job data on mount
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const job = await adminApi.getJob(params.id);
+
+        const expiryDate = job.expiryDate
+          ? new Date(job.expiryDate).toISOString().split("T")[0]
+          : "";
+
+        setJobData({
+          title: job.title || "",
+          shortDescription: job.shortDescription || "",
+          category: job.category || "",
+          jobType: job.jobType || "",
+          location: job.location || "",
+          expiryDate,
+          description: job.descriptionHtml || "",
+          applicationProcess: job.applicationProcess || "",
+          importantDates: job.importantDates || "",
+          howToApply: job.howToApply || "",
+          tags: job.tags || [],
+          imageUrl: job.imageUrl || "",
+          youtubeUrl: job.youtubeUrl || "",
+          metaTitle: job.metaTitle || "",
+          metaDescription: job.metaDescription || "",
+          metaKeywords: job.metaKeywords || [],
+          isPublished: job.isPublished ?? true,
+        });
+      } catch (error: any) {
+        console.error("Error fetching job:", error);
+        alert("Failed to load job data");
+        router.push("/admin/dashboard");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchJob();
+  }, [params.id, router]);
 
   const categories = [
     "railway",
@@ -463,10 +385,9 @@ export default function AddJobPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsSaving(true);
 
     try {
-      // Prepare data for API - map to Job model structure
       const apiData = {
         title: jobData.title,
         shortDescription: jobData.shortDescription,
@@ -487,23 +408,13 @@ export default function AddJobPage() {
         isPublished: jobData.isPublished,
       };
 
-      // Debug: Log what we're sending
-      console.log("📤 Sending job data:", {
-        title: apiData.title,
-        hasApplicationProcess: !!apiData.applicationProcess,
-        hasImportantDates: !!apiData.importantDates,
-        hasHowToApply: !!apiData.howToApply,
-        applicationProcessLength: apiData.applicationProcess?.length || 0,
-        importantDatesLength: apiData.importantDates?.length || 0,
-        howToApplyLength: apiData.howToApply?.length || 0,
-      });
-
-      await adminApi.createJob(apiData);
+      await adminApi.updateJob(params.id, apiData);
+      alert("Job updated successfully!");
       router.push("/admin/dashboard");
     } catch (error: any) {
-      alert(error.message || "Failed to create job");
+      alert(error.message || "Failed to update job");
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -513,6 +424,17 @@ export default function AddJobPage() {
       [field]: value,
     }));
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-navy-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading job data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -530,14 +452,10 @@ export default function AddJobPage() {
               >
                 ← Back
               </button>
-              <h1 className="text-xl font-semibold text-gray-900">
-                Add New Job
-              </h1>
+              <h1 className="text-xl font-semibold text-gray-900">Edit Job</h1>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-500">
-                Add job in any language - Auto-translation enabled
-              </span>
+              <span className="text-sm text-gray-500">Update job details</span>
             </div>
           </div>
         </div>
@@ -880,31 +798,15 @@ export default function AddJobPage() {
                   <div className="mb-3">
                     <TableBuilder
                       onInsert={(html) => {
-                        console.log("🔧 Insert table called");
-                        console.log("📝 HTML:", html);
-                        console.log("📌 Ref:", descriptionRef.current);
-
-                        if (!descriptionRef.current) {
-                          console.error("❌ Ref is null");
-                          alert("Editor not ready. Please try again.");
-                          return;
-                        }
-
-                        const quill = descriptionRef.current.getEditor();
-                        console.log("✏️ Quill instance:", quill);
-
+                        const quill = descriptionRef.current?.getEditor();
                         if (quill) {
-                          const range = quill.getSelection();
-                          const position = range
-                            ? range.index
-                            : quill.getLength();
-                          console.log("📍 Insert position:", position);
-
-                          quill.clipboard.dangerouslyPasteHTML(position, html);
-                          console.log("✅ Table inserted successfully");
-                        } else {
-                          console.error("❌ Could not get Quill editor");
-                          alert("Could not access editor. Please try again.");
+                          const range = quill.getSelection() || {
+                            index: quill.getLength(),
+                          };
+                          quill.clipboard.dangerouslyPasteHTML(
+                            range.index,
+                            html
+                          );
                         }
                         setShowTableBuilder(null);
                       }}
@@ -912,20 +814,16 @@ export default function AddJobPage() {
                   </div>
                 )}
 
-                {isMounted && ReactQuill && (
-                  <ReactQuill
-                    ref={descriptionRef}
-                    theme="snow"
-                    value={jobData.description}
-                    onChange={(value: string) =>
-                      updateField("description", value)
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Enter detailed job description including number of posts, department-wise breakdown, age limit, etc."
-                    style={{ height: "200px", marginBottom: "50px" }}
-                  />
-                )}
+                <ReactQuill
+                  ref={descriptionRef}
+                  theme="snow"
+                  value={jobData.description}
+                  onChange={(value) => updateField("description", value)}
+                  modules={quillModules}
+                  formats={quillFormats}
+                  placeholder="Enter detailed job description including number of posts, department-wise breakdown, age limit, etc."
+                  style={{ height: "200px", marginBottom: "50px" }}
+                />
               </div>
 
               <div>
@@ -981,20 +879,16 @@ export default function AddJobPage() {
                   </div>
                 )}
 
-                {isMounted && ReactQuill && (
-                  <ReactQuill
-                    ref={applicationRef}
-                    theme="snow"
-                    value={jobData.applicationProcess}
-                    onChange={(value: string) =>
-                      updateField("applicationProcess", value)
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Enter application process details: online/offline mode, registration steps, selection stages, exam pattern, etc."
-                    style={{ height: "150px", marginBottom: "50px" }}
-                  />
-                )}
+                <ReactQuill
+                  ref={applicationRef}
+                  theme="snow"
+                  value={jobData.applicationProcess}
+                  onChange={(value) => updateField("applicationProcess", value)}
+                  modules={quillModules}
+                  formats={quillFormats}
+                  placeholder="Enter application process details: online/offline mode, registration steps, selection stages, exam pattern, etc."
+                  style={{ height: "150px", marginBottom: "50px" }}
+                />
               </div>
 
               <div>
@@ -1050,20 +944,16 @@ export default function AddJobPage() {
                   </div>
                 )}
 
-                {isMounted && ReactQuill && (
-                  <ReactQuill
-                    ref={datesRef}
-                    theme="snow"
-                    value={jobData.importantDates}
-                    onChange={(value: string) =>
-                      updateField("importantDates", value)
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Enter important dates: Application Start Date, Last Date, Exam Date, Admit Card Date, Result Date, etc."
-                    style={{ height: "150px", marginBottom: "50px" }}
-                  />
-                )}
+                <ReactQuill
+                  ref={datesRef}
+                  theme="snow"
+                  value={jobData.importantDates}
+                  onChange={(value) => updateField("importantDates", value)}
+                  modules={quillModules}
+                  formats={quillFormats}
+                  placeholder="Enter important dates: Application Start Date, Last Date, Exam Date, Admit Card Date, Result Date, etc."
+                  style={{ height: "150px", marginBottom: "50px" }}
+                />
               </div>
 
               <div>
@@ -1117,20 +1007,16 @@ export default function AddJobPage() {
                   </div>
                 )}
 
-                {isMounted && ReactQuill && (
-                  <ReactQuill
-                    ref={applyRef}
-                    theme="snow"
-                    value={jobData.howToApply}
-                    onChange={(value: string) =>
-                      updateField("howToApply", value)
-                    }
-                    modules={quillModules}
-                    formats={quillFormats}
-                    placeholder="Enter step-by-step application instructions: Visit official website, register, fill form, upload documents, pay fee, submit, etc."
-                    style={{ height: "150px", marginBottom: "50px" }}
-                  />
-                )}
+                <ReactQuill
+                  ref={applyRef}
+                  theme="snow"
+                  value={jobData.howToApply}
+                  onChange={(value) => updateField("howToApply", value)}
+                  modules={quillModules}
+                  formats={quillFormats}
+                  placeholder="Enter step-by-step application instructions: Visit official website, register, fill form, upload documents, pay fee, submit, etc."
+                  style={{ height: "150px", marginBottom: "50px" }}
+                />
               </div>
             </div>
 
@@ -1222,10 +1108,10 @@ export default function AddJobPage() {
               </button>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isSaving}
                 className="px-6 py-3 bg-navy-900 hover:bg-navy-800 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors"
               >
-                {isLoading ? "Creating..." : "Create Job"}
+                {isSaving ? "Updating..." : "Update Job"}
               </button>
             </div>
           </form>

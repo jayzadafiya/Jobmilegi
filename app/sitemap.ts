@@ -8,7 +8,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     await dbConnect();
 
-    // Get all published jobs
     const jobs = await Job.find({ isPublished: true })
       .select("slug updatedAt")
       .sort({ updatedAt: -1 })
@@ -16,7 +15,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const locales = ["hi", "en", "mr", "bn", "ta", "te", "gu"];
 
-    // Static routes
     const staticRoutes: MetadataRoute.Sitemap = [];
 
     locales.forEach((locale) => {
@@ -36,7 +34,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       );
     });
 
-    // Job detail routes
     const jobRoutes: MetadataRoute.Sitemap = [];
 
     jobs.forEach((job) => {
@@ -54,7 +51,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch (error) {
     console.error("Sitemap generation error:", error);
 
-    // Return basic sitemap if database fails
     return [
       {
         url: baseUrl,

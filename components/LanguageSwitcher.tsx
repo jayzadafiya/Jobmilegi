@@ -25,17 +25,14 @@ export default function LanguageSwitcher() {
     languages.find((lang) => lang.code === locale) || languages[0];
 
   const handleLanguageChange = (langCode: string) => {
-    // Remove current locale from pathname and add new one
     const segments = pathname.split("/").filter(Boolean);
     const isLocaleInPath = routing.locales.includes(segments[0] as any);
 
     let newPath = "";
     if (isLocaleInPath) {
-      // Replace existing locale
       segments[0] = langCode;
       newPath = "/" + segments.join("/");
     } else {
-      // Add locale to path
       newPath = `/${langCode}${pathname}`;
     }
 

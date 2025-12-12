@@ -13,14 +13,9 @@ const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Add any auth headers or custom logic here
-    console.log(
-      `Making ${config.method?.toUpperCase()} request to: ${config.url}`
-    );
     return config;
   },
   (error) => {
-    console.error("Request error:", error);
     return Promise.reject(error);
   }
 );
@@ -28,67 +23,34 @@ axiosInstance.interceptors.request.use(
 // Response interceptor
 axiosInstance.interceptors.response.use(
   (response) => {
-    // Any status code that lies within the range of 2xx causes this function to trigger
     return response;
   },
   (error) => {
-    // Any status codes that fall outside the range of 2xx cause this function to trigger
     const { response, request, message } = error;
 
     if (response) {
-      // Server responded with error status
       const { status, data } = response;
 
       switch (status) {
-        case 400:
-          console.error("Bad Request:", data.message || data.error);
-          break;
         case 401:
-          console.error("Unauthorized access");
-          // Redirect to login for admin routes
           if (window.location.pathname.startsWith("/admin")) {
             window.location.href = "/admin/login";
           }
           break;
-        case 403:
-          console.error("Forbidden access");
-          break;
-        case 404:
-          console.error("Resource not found");
-          break;
-        case 422:
-          console.error("Validation error:", data.message || data.error);
-          break;
-        case 429:
-          console.error("Too many requests");
-          break;
-        case 500:
-          console.error("Internal server error");
-          break;
-        default:
-          console.error(
-            `Error ${status}:`,
-            data.message || data.error || "Unknown error"
-          );
       }
 
-      // Return formatted error
       return Promise.reject({
         status,
         message: data.message || data.error || `HTTP ${status} Error`,
         data: data,
       });
     } else if (request) {
-      // Request was made but no response received
-      console.error("Network error: No response received");
       return Promise.reject({
         status: 0,
         message: "Network error: Unable to connect to server",
         data: null,
       });
     } else {
-      // Something happened in setting up the request
-      console.error("Request setup error:", message);
       return Promise.reject({
         status: -1,
         message: message || "Request setup error",
@@ -98,7 +60,6 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// Helper functions for common HTTP methods
 export const api = {
   get: <T = any>(url: string, config = {}) =>
     axiosInstance.get<T>(url, config).then((response) => response.data),
@@ -116,7 +77,6 @@ export const api = {
     axiosInstance.delete<T>(url, config).then((response) => response.data),
 };
 
-// Admin API helpers
 export const adminApi = {
   login: (credentials: { username: string; password: string }) =>
     api.post("/api/admin/login", credentials),
@@ -137,7 +97,6 @@ export const adminApi = {
   deleteJob: (id: string) => api.delete(`/api/admin/jobs/${id}`),
 };
 
-// Public API helpers
 export const publicApi = {
   getJobs: (params = {}) => api.get("/api/jobs", { params }),
 

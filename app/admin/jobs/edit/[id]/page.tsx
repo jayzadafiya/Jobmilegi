@@ -5,10 +5,9 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { adminApi } from "@/lib/axios";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false }) as any;
 import "react-quill/dist/quill.snow.css";
 
-// Custom styles for Quill editor
 const quillStyles = `
   .ql-editor {
     color: #111827 !important;
@@ -53,7 +52,6 @@ const quillStyles = `
   }
 `;
 
-// Table Builder Component
 function TableBuilder({ onInsert }: { onInsert: (html: string) => void }) {
   const [headers, setHeaders] = useState(["Header 1", "Header 2", "Header 3"]);
   const [rows, setRows] = useState([
@@ -350,7 +348,6 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
           isPublished: job.isPublished ?? true,
         });
       } catch (error: any) {
-        console.error("Error fetching job:", error);
         alert("Failed to load job data");
         router.push("/admin/dashboard");
       } finally {
@@ -818,7 +815,9 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
                   ref={descriptionRef}
                   theme="snow"
                   value={jobData.description}
-                  onChange={(value) => updateField("description", value)}
+                  onChange={(value: string) =>
+                    updateField("description", value)
+                  }
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Enter detailed job description including number of posts, department-wise breakdown, age limit, etc."
@@ -883,7 +882,9 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
                   ref={applicationRef}
                   theme="snow"
                   value={jobData.applicationProcess}
-                  onChange={(value) => updateField("applicationProcess", value)}
+                  onChange={(value: string) =>
+                    updateField("applicationProcess", value)
+                  }
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Enter application process details: online/offline mode, registration steps, selection stages, exam pattern, etc."
@@ -948,7 +949,9 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
                   ref={datesRef}
                   theme="snow"
                   value={jobData.importantDates}
-                  onChange={(value) => updateField("importantDates", value)}
+                  onChange={(value: string) =>
+                    updateField("importantDates", value)
+                  }
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Enter important dates: Application Start Date, Last Date, Exam Date, Admit Card Date, Result Date, etc."
@@ -1011,7 +1014,7 @@ export default function EditJobPage({ params }: { params: { id: string } }) {
                   ref={applyRef}
                   theme="snow"
                   value={jobData.howToApply}
-                  onChange={(value) => updateField("howToApply", value)}
+                  onChange={(value: string) => updateField("howToApply", value)}
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Enter step-by-step application instructions: Visit official website, register, fill form, upload documents, pay fee, submit, etc."

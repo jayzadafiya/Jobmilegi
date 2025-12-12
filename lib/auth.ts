@@ -40,7 +40,6 @@ export async function getAdminFromToken(): Promise<TokenPayload | null> {
 export function setAdminCookie(payload: TokenPayload): string {
   const token = generateToken(payload);
 
-  // This will be used in API routes to set the cookie
   return `admin-token=${token}; HttpOnly; Path=/; Max-Age=${
     7 * 24 * 60 * 60
   }; SameSite=strict`;

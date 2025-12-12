@@ -26,7 +26,6 @@ async function getJob(slug: string) {
     }
     return null;
   } catch (error) {
-    console.error("Error fetching job:", error);
     return null;
   }
 }
@@ -45,7 +44,6 @@ async function getRelatedJobs(category: string, currentJobId: string) {
       .lean();
     return JSON.parse(JSON.stringify(jobs));
   } catch (error) {
-    console.error("Error fetching related jobs:", error);
     return [];
   }
 }

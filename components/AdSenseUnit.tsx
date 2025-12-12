@@ -15,7 +15,6 @@ export default function AdSenseUnit({
   className = "",
   style = { display: "block" },
 }: AdSenseUnitProps) {
-  // Temporarily disabled until AdSense approval
   return (
     <div
       className={`bg-gradient-to-r from-gray-100 to-gray-200 p-6 text-center rounded-lg border-2 border-dashed border-gray-300 ${className}`}

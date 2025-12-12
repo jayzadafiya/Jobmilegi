@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n";
+import { formatDate, categoryColors } from "@/lib/utils";
 
 interface JobCardProps {
   job: {
@@ -31,25 +32,6 @@ export default function JobCard({
   const t = useTranslations("jobCard");
   const tCategories = useTranslations("categories");
 
-  const categoryColors: { [key: string]: string } = {
-    railway: "bg-blue-100 text-blue-800",
-    ssc: "bg-green-100 text-green-800",
-    bank: "bg-yellow-100 text-yellow-800",
-    police: "bg-red-100 text-red-800",
-    stateGovt: "bg-purple-100 text-purple-800",
-    defenseJobs: "bg-orange-100 text-orange-800",
-    teachingJobs: "bg-indigo-100 text-indigo-800",
-    engineeringJobs: "bg-pink-100 text-pink-800",
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("hi-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
   const isExpiring = () => {
     const expiryDate = new Date(job.expiryDate);
     const today = new Date();
@@ -61,7 +43,6 @@ export default function JobCard({
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="p-6">
-        {/* Header with badges */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex flex-wrap gap-2">
             <span
@@ -111,21 +92,19 @@ export default function JobCard({
           </div>
         </div>
 
-        {/* Content */}
         <div className="flex gap-4">
-          {/* Image */}
           {job.imageUrl && (
             <div className="flex-shrink-0 w-20 h-20 relative">
               <Image
                 src={job.imageUrl}
                 alt={job.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover rounded-lg"
               />
             </div>
           )}
 
-          {/* Text Content */}
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 text-lg mb-2 line-clamp-2 leading-tight">
               {job.title}
@@ -141,7 +120,6 @@ export default function JobCard({
               {job.shortDescription}
             </p>
 
-            {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 mb-4">
               <div className="flex items-center">
                 <svg
@@ -227,3 +205,4 @@ export default function JobCard({
     </div>
   );
 }
+

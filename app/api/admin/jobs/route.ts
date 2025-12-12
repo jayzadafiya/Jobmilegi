@@ -4,7 +4,6 @@ import Job from "@/lib/models/Job";
 import Admin from "@/lib/models/Admin";
 import jwt from "jsonwebtoken";
 
-// Helper to verify admin token
 async function verifyAdmin(request: NextRequest) {
   const token = request.cookies.get("admin-token")?.value;
 
@@ -30,7 +29,6 @@ async function verifyAdmin(request: NextRequest) {
   }
 }
 
-// GET - Get all jobs (admin)
 export async function GET(request: NextRequest) {
   try {
     const admin = await verifyAdmin(request);
@@ -44,7 +42,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(jobs);
   } catch (error) {
-    console.error("Error fetching jobs:", error);
     return NextResponse.json(
       { error: "Failed to fetch jobs" },
       { status: 500 }
@@ -52,7 +49,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create new job
 export async function POST(request: NextRequest) {
   try {
     const admin = await verifyAdmin(request);
@@ -62,17 +58,6 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await request.json();
-
-    // Debug: Log received data
-    console.log("📥 Received job data:", {
-      title: data.title,
-      hasApplicationProcess: !!data.applicationProcess,
-      hasImportantDates: !!data.importantDates,
-      hasHowToApply: !!data.howToApply,
-      applicationProcessLength: data.applicationProcess?.length || 0,
-      importantDatesLength: data.importantDates?.length || 0,
-      howToApplyLength: data.howToApply?.length || 0,
-    });
 
     await connectToDatabase();
     const job = await Job.create({
@@ -84,11 +69,8 @@ export async function POST(request: NextRequest) {
       createdBy: admin._id,
     });
 
-    console.log("✅ Job created:", job._id);
-
     return NextResponse.json(job, { status: 201 });
   } catch (error) {
-    console.error("❌ Error creating job:", error);
     return NextResponse.json(
       { error: "Failed to create job" },
       { status: 500 }

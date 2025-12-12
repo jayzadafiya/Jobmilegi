@@ -7,7 +7,6 @@ import { adminApi } from "@/lib/axios";
 
 import "react-quill/dist/quill.snow.css";
 
-// Properly typed ReactQuill component with ref support
 let ReactQuill: any;
 if (typeof window !== "undefined") {
   ReactQuill = require("react-quill");
@@ -58,7 +57,7 @@ const quillStyles = `
   }
 `;
 
-// Table Builder Component
+
 function TableBuilder({ onInsert }: { onInsert: (html: string) => void }) {
   const [headers, setHeaders] = useState(["Header 1", "Header 2", "Header 3"]);
   const [rows, setRows] = useState([
@@ -122,16 +121,10 @@ function TableBuilder({ onInsert }: { onInsert: (html: string) => void }) {
   };
 
   const insertTable = () => {
-    console.log("🎯 insertTable function called!");
-    console.log("📦 onInsert prop:", typeof onInsert, onInsert);
     try {
       const html = generateHTML();
-      console.log("✅ HTML generated:", html.substring(0, 100) + "...");
-      console.log("🚀 Calling onInsert...");
       onInsert(html);
-      console.log("✅ onInsert called successfully");
     } catch (error) {
-      console.error("❌ Error in insertTable:", error);
       alert("Error inserting table: " + error);
     }
   };
@@ -294,7 +287,6 @@ export default function AddJobPage() {
     setIsMounted(true);
   }, []);
 
-  // Quill modules configuration
   const quillModules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -466,7 +458,6 @@ export default function AddJobPage() {
     setIsLoading(true);
 
     try {
-      // Prepare data for API - map to Job model structure
       const apiData = {
         title: jobData.title,
         shortDescription: jobData.shortDescription,
@@ -487,16 +478,7 @@ export default function AddJobPage() {
         isPublished: jobData.isPublished,
       };
 
-      // Debug: Log what we're sending
-      console.log("📤 Sending job data:", {
-        title: apiData.title,
-        hasApplicationProcess: !!apiData.applicationProcess,
-        hasImportantDates: !!apiData.importantDates,
-        hasHowToApply: !!apiData.howToApply,
-        applicationProcessLength: apiData.applicationProcess?.length || 0,
-        importantDatesLength: apiData.importantDates?.length || 0,
-        howToApplyLength: apiData.howToApply?.length || 0,
-      });
+
 
       await adminApi.createJob(apiData);
       router.push("/admin/dashboard");

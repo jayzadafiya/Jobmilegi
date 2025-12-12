@@ -7,7 +7,6 @@ import { Link } from "@/lib/i18n";
 import dbConnect from "@/lib/mongodb";
 import Job from "@/lib/models/Job";
 
-// Fetch latest jobs from database
 async function getLatestJobs() {
   try {
     await dbConnect();
@@ -18,12 +17,10 @@ async function getLatestJobs() {
       .lean();
     return JSON.parse(JSON.stringify(jobs));
   } catch (error) {
-    console.error("Error fetching latest jobs:", error);
     return [];
   }
 }
 
-// Get category counts from database
 async function getCategoryCounts() {
   try {
     await dbConnect();
@@ -39,7 +36,6 @@ async function getCategoryCounts() {
 
     return categoriesMap;
   } catch (error) {
-    console.error("Error fetching category counts:", error);
     return {};
   }
 }

@@ -96,7 +96,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu */}
         {isMenuOpen && (
           <div className="md:hidden border-t border-navy-800">
             <div className="py-2 space-y-1">

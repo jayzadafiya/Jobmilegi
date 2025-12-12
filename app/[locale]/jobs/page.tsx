@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Navbar from "@/components/Navbar";
 import JobCard from "@/components/JobCard";
@@ -16,13 +15,11 @@ interface JobsPageProps {
   };
 }
 
-// Fetch jobs from API
 async function getJobs(filters: any) {
   try {
     const params = new URLSearchParams();
 
     if (filters.page) params.append("page", filters.page);
-    // default limit to 10 if not provided
     params.append("limit", "10");
     if (filters.category && filters.category !== "all")
       params.append("category", filters.category);
@@ -32,12 +29,10 @@ async function getJobs(filters: any) {
 
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     const res = await fetch(`${baseUrl}/api/jobs?${params.toString()}`, {
-      // no-store to always get fresh data; for caching, change as necessary
       cache: "no-store",
     });
 
     if (!res.ok) {
-      console.error("Failed to fetch jobs from API", await res.text());
       return { jobs: [], total: 0, page: 1, totalPages: 0 };
     }
 
@@ -50,7 +45,6 @@ async function getJobs(filters: any) {
       totalPages: data.pagination?.pages ?? 0,
     };
   } catch (error) {
-    console.error("Error fetching jobs:", error);
     return { jobs: [], total: 0, page: 1, totalPages: 0 };
   }
 }

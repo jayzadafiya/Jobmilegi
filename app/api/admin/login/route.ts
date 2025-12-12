@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find admin
     const admin = await Admin.findOne({
       $or: [{ username: username }, { email: username }],
       isActive: true,
@@ -29,11 +28,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update last login
     admin.lastLogin = new Date();
     await admin.save();
 
-    // Create response with cookie
     const response = NextResponse.json({
       success: true,
       admin: {
@@ -44,7 +41,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Set HTTP-only cookie
     const cookie = setAdminCookie({
       adminId: admin._id.toString(),
       username: admin.username,
@@ -55,7 +51,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Admin login error:", error);
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }

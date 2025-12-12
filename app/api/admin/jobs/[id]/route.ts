@@ -30,7 +30,6 @@ async function verifyAdmin(request: NextRequest) {
   }
 }
 
-// GET - Get single job
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -51,12 +50,10 @@ export async function GET(
 
     return NextResponse.json(job);
   } catch (error) {
-    console.error("Error fetching job:", error);
     return NextResponse.json({ error: "Failed to fetch job" }, { status: 500 });
   }
 }
 
-// PUT - Update job
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -94,7 +91,6 @@ export async function PUT(
   }
 }
 
-// DELETE - Delete job
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }

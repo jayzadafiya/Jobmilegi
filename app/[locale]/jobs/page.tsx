@@ -1,9 +1,9 @@
-import { Suspense } from "react";
 import { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Navbar from "@/components/Navbar";
 import JobCard from "@/components/JobCard";
+import JobsFilter from "@/components/JobsFilter";
 import AdSenseUnit from "@/components/AdSenseUnit";
 
 interface JobsPageProps {
@@ -16,99 +16,43 @@ interface JobsPageProps {
   };
 }
 
-// Mock jobs data - replace with actual API call
-const mockJobs = [
-  {
-    _id: "1",
-    title: "Indian Railway Group D Recruitment 2024",
-    slug: "indian-railway-group-d-recruitment-2024",
-    subtitle: "1,03,769 Posts Available",
-    shortDescription:
-      "Railway Recruitment Board (RRB) has released notification for Group D recruitment. Apply online for various posts including Track Maintainer, Helper, Assistant Pointsman.",
-    category: "railway",
-    jobType: "latest",
-    publishDate: new Date().toISOString(),
-    expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-    location: "All India",
-    views: 15420,
-    imageUrl: "/images/railway-logo.png",
-  },
-  {
-    _id: "2",
-    title: "SSC CHSL 2024 Notification Released",
-    slug: "ssc-chsl-2024-notification-released",
-    subtitle: "3,712 Vacancies",
-    shortDescription:
-      "Staff Selection Commission has released notification for Combined Higher Secondary Level Examination 2024. Apply for LDC, JSA, PA, SA, and DEO posts.",
-    category: "ssc",
-    jobType: "latest",
-    publishDate: new Date().toISOString(),
-    expiryDate: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toISOString(),
-    location: "All India",
-    views: 8934,
-    imageUrl: "/images/ssc-logo.png",
-  },
-  {
-    _id: "3",
-    title: "Bank PO Recruitment 2024",
-    slug: "bank-po-recruitment-2024",
-    subtitle: "Multiple Banks - 2,500+ Posts",
-    shortDescription:
-      "Various public sector banks have announced recruitment for Probationary Officer positions. Great opportunity for banking career aspirants.",
-    category: "bank",
-    jobType: "latest",
-    publishDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    expiryDate: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString(),
-    location: "All India",
-    views: 12350,
-    imageUrl: "/images/bank-logo.png",
-  },
-  {
-    _id: "4",
-    title: "Police Constable Recruitment 2024",
-    slug: "police-constable-recruitment-2024",
-    subtitle: "State Police - 5,000+ Vacancies",
-    shortDescription:
-      "State police departments across India are recruiting constables. Physical and written test required. Apply before deadline.",
-    category: "police",
-    jobType: "latest",
-    publishDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    expiryDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
-    location: "Multiple States",
-    views: 9876,
-    imageUrl: "/images/police-logo.png",
-  },
-];
-
+// Fetch jobs from API
 async function getJobs(filters: any) {
-  // This would normally call your API
-  let filteredJobs = [...mockJobs];
+  try {
+    const params = new URLSearchParams();
 
-  if (filters.category) {
-    filteredJobs = filteredJobs.filter(
-      (job) => job.category === filters.category
-    );
+    if (filters.page) params.append("page", filters.page);
+    // default limit to 10 if not provided
+    params.append("limit", "10");
+    if (filters.category && filters.category !== "all")
+      params.append("category", filters.category);
+    if (filters.type && filters.type !== "all")
+      params.append("type", filters.type);
+    if (filters.search) params.append("search", filters.search);
+
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    const res = await fetch(`${baseUrl}/api/jobs?${params.toString()}`, {
+      // no-store to always get fresh data; for caching, change as necessary
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      console.error("Failed to fetch jobs from API", await res.text());
+      return { jobs: [], total: 0, page: 1, totalPages: 0 };
+    }
+
+    const data = await res.json();
+
+    return {
+      jobs: data.jobs || [],
+      total: data.pagination?.total ?? 0,
+      page: data.pagination?.page ?? 1,
+      totalPages: data.pagination?.pages ?? 0,
+    };
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    return { jobs: [], total: 0, page: 1, totalPages: 0 };
   }
-
-  if (filters.type) {
-    filteredJobs = filteredJobs.filter((job) => job.jobType === filters.type);
-  }
-
-  if (filters.search) {
-    const searchTerm = filters.search.toLowerCase();
-    filteredJobs = filteredJobs.filter(
-      (job) =>
-        job.title.toLowerCase().includes(searchTerm) ||
-        job.shortDescription.toLowerCase().includes(searchTerm)
-    );
-  }
-
-  return {
-    jobs: filteredJobs,
-    total: filteredJobs.length,
-    page: parseInt(filters.page || "1"),
-    totalPages: Math.ceil(filteredJobs.length / 10),
-  };
 }
 
 export async function generateMetadata({
@@ -134,94 +78,32 @@ export async function generateMetadata({
   };
 }
 
-function JobsFilter({ searchParams }: { searchParams: any }) {
-  const categories = [
-    { key: "all", label: "All Categories" },
-    { key: "railway", label: "Railway" },
-    { key: "ssc", label: "SSC" },
-    { key: "bank", label: "Bank" },
-    { key: "police", label: "Police" },
-    { key: "stateGovt", label: "State Govt" },
-    { key: "defenseJobs", label: "Defense" },
-    { key: "teachingJobs", label: "Teaching" },
-    { key: "engineeringJobs", label: "Engineering" },
-  ];
-
-  const types = [
-    { key: "all", label: "All Types" },
-    { key: "latest", label: "Latest Jobs" },
-    { key: "admitCard", label: "Admit Cards" },
-    { key: "result", label: "Results" },
-    { key: "answerKey", label: "Answer Keys" },
-  ];
-
-  return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 mb-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Jobs</h2>
-
-      <div className="grid md:grid-cols-3 gap-4">
-        {/* Category Filter */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Category
-          </label>
-          <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
-            defaultValue={searchParams.category || "all"}
-          >
-            {categories.map((cat) => (
-              <option key={cat.key} value={cat.key}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Type Filter */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Type
-          </label>
-          <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
-            defaultValue={searchParams.type || "all"}
-          >
-            {types.map((type) => (
-              <option key={type.key} value={type.key}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Search */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Search
-          </label>
-          <input
-            type="text"
-            placeholder="Search jobs..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500"
-            defaultValue={searchParams.search || ""}
-          />
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <button className="bg-navy-900 hover:bg-navy-800 text-white px-6 py-2 rounded-lg transition-colors">
-          Apply Filters
-        </button>
-      </div>
-    </div>
-  );
+interface Job {
+  _id: string;
+  title: string;
+  slug: string;
+  subtitle?: string;
+  shortDescription: string;
+  category: string;
+  jobType: string;
+  publishDate: string;
+  expiryDate: string;
+  location: string;
+  views: number;
+  imageUrl?: string;
 }
 
 export default async function JobsPage({
   params,
   searchParams,
 }: JobsPageProps) {
-  const { jobs, total, page, totalPages } = await getJobs(searchParams);
+  const {
+    jobs,
+    total,
+    page,
+    totalPages,
+  }: { jobs: Job[]; total: number; page: number; totalPages: number } | any =
+    await getJobs(searchParams);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -269,7 +151,7 @@ export default async function JobsPage({
 
             {/* Jobs List */}
             <div className="space-y-6">
-              {jobs.map((job, index) => (
+              {jobs.map((job: Job, index: number) => (
                 <div key={job._id}>
                   <JobCard
                     job={job}
@@ -362,7 +244,7 @@ export default async function JobsPage({
                   Recent Jobs
                 </h3>
                 <div className="space-y-3">
-                  {jobs.slice(0, 3).map((job) => (
+                  {jobs.slice(0, 3).map((job: Job) => (
                     <div
                       key={job._id}
                       className="border-b border-gray-100 pb-3 last:border-b-0"

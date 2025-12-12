@@ -1,20 +1,19 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./lib/i18n";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const intlMiddleware = createMiddleware(routing);
 
 export default function middleware(request: NextRequest) {
   // Skip i18n for admin routes
   if (request.nextUrl.pathname.startsWith("/admin")) {
-    return;
+    return NextResponse.next();
   }
 
   return intlMiddleware(request);
 }
 
 export const config = {
-  // Match only internationalized pathnames, exclude admin routes
   matcher: [
     "/",
     "/(hi|en|mr|bn|ta|te|gu)/:path*",
